@@ -1,8 +1,8 @@
 version: '3.3'
 services:
   db:
-    image: mysql:5.7
-    restart: always
+    image: mysql:8.0
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: 'db'
       MYSQL_USER: 'user'
@@ -20,10 +20,17 @@ services:
       PORT: 8000
     ports:
       - '8000:8000'
-    restart: "no"
+    restart: unless-stopped
     volumes:
       - fastapi:/var/lib/fastapi
 
+  tunnel:
+    container_name: cloudflared-tunnel
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=eyJhIjoiZTk4ZWNlMDhhN2QwNDRmMjk1Yjc3NTY0YmExM2NhMjQiLCJ0IjoiZDEzMTAwZWMtOWU3Ny00YjVlLTg5YTYtZTFhMzQxODQ5YjBkIiwicyI6Ik5tUTBNREpoTWpZdE16SXlPUzAwTldRMkxUa3hPVE10WXpkbVpXTTBNVGMyTkdNeCJ9
 # Names our volume
 volumes:
   my-db:
