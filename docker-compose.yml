@@ -9,7 +9,7 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
-      - '3306:3306'
+      - '127.0.0.1:3306:3306'
     volumes:
       - my-db:/var/lib/mysql
 
@@ -23,14 +23,6 @@ services:
     restart: unless-stopped
     volumes:
       - fastapi:/var/lib/fastapi
-
-  tunnel:
-    container_name: cloudflared-tunnel
-    image: cloudflare/cloudflared
-    restart: unless-stopped
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=eyJhIjoiZTk4ZWNlMDhhN2QwNDRmMjk1Yjc3NTY0YmExM2NhMjQiLCJ0IjoiZDEzMTAwZWMtOWU3Ny00YjVlLTg5YTYtZTFhMzQxODQ5YjBkIiwicyI6Ik5tUTBNREpoTWpZdE16SXlPUzAwTldRMkxUa3hPVE10WXpkbVpXTTBNVGMyTkdNeCJ9
 # Names our volume
 volumes:
   my-db:
