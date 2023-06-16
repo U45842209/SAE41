@@ -1,5 +1,0 @@
-pip install uvicorn
-pip install jinja2
-pip install fastapi
-pip install mysql-connector-python
-pip install fastapi-responses
