@@ -14,18 +14,18 @@ class CookieAuthMiddleware:
     def __init__(self, app):
         self.app = app
 
-    async def __call__(self, request: Request, call_next, response: Response):
-
-        #Vérifie l'url
-        if request.url.path =="/rdv":
+    async def __call__(self, scope, receive, send):
+        request = Request(scope, receive)
+        
+        # Vérifie l'url
+        if request.url.path == "/rdv":
             # Vérifie la présence du cookie
             if "username" not in request.cookies:
                 return PlainTextResponse("Accès interdit. Veuillez vous connecter.", status_code=403)
 
         # Le cookie est présent, poursuivre avec la requête normale
-        response = await call_next(request)
+        response = await self.app(scope, receive, send)
         return response
-
 
 #Ajout du middleware à FastAPI
 middlewares = [
@@ -40,7 +40,7 @@ try:
         host="172.20.0.10",
         user="root",
         password="password2",
-        database="mysql"
+        database="SAE410"
     )
     sql_cursor = mydb.cursor()
 
@@ -64,9 +64,6 @@ finally:
         sql_cursor.close()
         mydb.close()
 
-
-
-print("Ok")
 
 #Initialisation des templates pour jinja
 templates = Jinja2Templates(directory="templates")

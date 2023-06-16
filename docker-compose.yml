@@ -13,6 +13,7 @@ services:
       - '3306:3306'
     volumes:
       - my-db:/var/lib/mysql
+      - ./app/sae410.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     networks:
       SAE41_network:
         ipv4_address: 172.20.0.10
