@@ -4,9 +4,9 @@ WORKDIR /app
 
 RUN apt update && apt upgrade -y
 
-RUN apt install pip -y
+RUN apt install python3-pip -y
 
-RUN pip install uvicorn fastapi jinja2 mysql-connector-python fastapi-responses
+RUN pip install uvicorn fastapi jinja2 mysql-connector-python fastapi-responses python-multipart
 
 COPY ./app/ ./
 

@@ -39,7 +39,7 @@ try:
     mydb = mysql.connector.connect(
         host="172.20.0.10",
         user="root",
-        password="password",
+        password="password2",
         database="mysql"
     )
     sql_cursor = mydb.cursor()
