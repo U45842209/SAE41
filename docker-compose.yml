@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     restart: unless-stopped
     container_name: mysql
     environment:
@@ -18,7 +18,9 @@ services:
         ipv4_address: 172.20.0.10
 
   fastapi:
-    build: fastapi_dock
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
     container_name: fastapi
     environment:
       PORT: 8000
@@ -32,7 +34,9 @@ services:
         ipv4_address: 172.20.0.20
 
   adminer:
-    build: adminer_dock
+    build:
+      context: .
+      dockerfile: Dockerfile.adminer
     restart: unless-stopped
     container_name: adminer
     networks:
