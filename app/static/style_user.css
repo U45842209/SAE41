@@ -1,0 +1,143 @@
+.cache{
+    display: none;
+}
+
+html, body{
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(214, 212, 212);
+
+    
+}
+
+
+/*HEADER*/
+
+header h1{
+  font-size: 25px;
+  margin: 0px;
+  padding: 20px 0px 30px 30px;  
+}
+
+header{
+background-color: rgb(172, 172, 172);
+
+}
+
+#bouton1, #bouton2{
+  text-decoration: none;
+  color: #000000; 
+  padding: 10px 20px; 
+  border: none; 
+  cursor: pointer;
+  font-size: 25px;
+  margin-left: 30px;
+  border-radius: 5px 5px 0px 0px; 
+  background-color: rgb(214, 212, 212);
+}
+
+#bouton1:hover, #bouton2:hover {
+  background-color:rgb(168, 164, 164) ;
+
+}
+
+
+/*FORMULAIRE TICKETS*/
+#ticket{
+    padding: 40px;
+    padding-right: 90px;
+    
+}
+
+#ticket h2{
+    font-size: 50px;
+}
+#titre{
+    font-size: 30px;
+}
+
+
+
+   #ticket form input[type="submit"] {
+    background-color: rgb(129, 128, 128); 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    
+  }
+  
+  #ticket form input[type="submit"]:hover {
+    background-color: #505150; 
+  }
+
+  #ticketform input{
+    border-radius: 3px;
+    padding: 2px;
+
+  }
+
+
+
+/*TABLEAU*/
+
+  #tableau{
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  #tableau h2{
+    margin: 0px;
+    padding-top:50px;
+    padding-bottom: 20px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 15px;
+ 
+  }
+  
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    background-color: #ffffff;
+    
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+ 
+  td:nth-child(4) {
+    max-width: 200px; 
+    word-wrap: break-word; 
+  }
+
+  td:nth-child(7) {
+    max-width: 200px; 
+    word-wrap: break-word;
+  }
+
+
+  /*LIENS*/
+#lien-deconnexion {
+  background-color: rgb(255, 6, 6); 
+  color: rgb(255, 255, 255); 
+  text-decoration: none; 
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 10px; 
+  border-radius: 5px; 
+  position: absolute;
+  top: 10px; 
+  right: 10px;
+}
+
+#lien-deconnexion:hover {
+  background-color: #991c1c; 
+}
+

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Titre de la page</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='style_user.css') }}"/>
+</head>
+<body>
+  <h1>Hello {{ username }} </h1>
+
+  <button id="bouton1">Créer un RDV</button></li>
+  <button id="bouton2">Mes RDV</button></li>
+
+
+
+
+<div id="new_rdv">
+            <h2>Créer un nouveau RDV :</h2>
+<form method="post">
+      <label> Nouveau RDV </label>
+    <input placeholder="Objet" type="text" name="objet">
+    <br>
+    <label> Date : </label>
+    <input type="date" name="date">
+    <br>
+    <input type="submit" value="Envoyer">
+  </form>
+
+ </div>
+<div id="tableau" class="cache">
+            <h2>Vos tickets :</h2>
+                <table>
+                    <tr>
+                        <th>Objet</th>
+                        <th>Description</th>
+                        <th>Date du rendez-vous</th>
+                    </tr>
+                </table>
+</div>
+
+ <script src="{{ url_for('static', path='index_menu_user.js') }}"></script>
+</body>
+</html>
