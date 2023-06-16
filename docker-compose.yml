@@ -42,7 +42,7 @@ services:
     networks:
       SAE41_network:
         ipv4_address: 172.20.0.30
-    command: sh -c "tail -f /dev/null"
+
 # Names our volume
 volumes:
   my-db:
