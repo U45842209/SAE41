@@ -8,9 +8,10 @@ import webbrowser
 
 mydb = mysql.connector.connect(
 
-    host="localhost",
-    user="user_admin",
-    password="Password1234*",
+    host="172.20.0.10",
+    port=3306,
+    user="user",
+    password="password1",
     database="SAE410"
 )
 

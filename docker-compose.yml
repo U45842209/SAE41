@@ -3,19 +3,23 @@ services:
   db:
     image: mysql:8.0
     restart: unless-stopped
+    container_name: mysql
     environment:
-      MYSQL_DATABASE: 'sae410'
+      MYSQL_DATABASE: 'SAE410'
       MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'GPC_C_LA_VIE'
-      MYSQL_ROOT_PASSWORD: 'GPC_C_LA_VIE'
+      MYSQL_PASSWORD: 'password1'
+      MYSQL_ROOT_PASSWORD: 'password2'
     ports:
-      - '127.0.0.1:3306:3306'
+      - '3306:3306'
     volumes:
       - my-db:/var/lib/mysql
+    networks:
+      SAE41_network:
+        ipv4_address: 172.20.0.10
 
   fastapi:
-    build: .
-    container_name: fastapi-application
+    build: fastapi_dock
+    container_name: fastapi
     environment:
       PORT: 8000
     ports:
@@ -23,7 +27,26 @@ services:
     restart: unless-stopped
     volumes:
       - fastapi:/var/lib/fastapi
+    networks:
+      SAE41_network:
+        ipv4_address: 172.20.0.20
+
+  adminer:
+    build: adminer_dock
+    restart: unless-stopped
+    container_name: adminer
+    networks:
+      SAE41_network:
+        ipv4_address: 172.20.0.30
+    command: sh -c "tail -f /dev/null"
 # Names our volume
 volumes:
   my-db:
   fastapi:
+
+networks:
+  SAE41_network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
