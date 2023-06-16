@@ -1,29 +1,71 @@
 from fastapi import FastAPI, Request, Form, Response, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse,RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
+from fastapi.middleware import Middleware
 from typing import Annotated
 import mysql.connector
+from mysql.connector import errorcode
 import webbrowser
 
-mydb = mysql.connector.connect(
 
-    host="172.20.0.10",
-    port=3306,
-    user="user",
-    password="password1",
-    database="SAE410"
-)
+#Partie qui permet de bloquer des pages si le cookie n'est pas set avec le principe du middleware
+class CookieAuthMiddleware:
+    def __init__(self, app):
+        self.app = app
 
-sql_cursor = mydb.cursor()
+    async def __call__(self, request: Request, call_next, response: Response):
+
+        #Vérifie l'url
+        if request.url.path =="/rdv":
+            # Vérifie la présence du cookie
+            if "username" not in request.cookies:
+                return PlainTextResponse("Accès interdit. Veuillez vous connecter.", status_code=403)
+
+        # Le cookie est présent, poursuivre avec la requête normale
+        response = await call_next(request)
+        return response
+
+
+#Ajout du middleware à FastAPI
+middlewares = [
+    Middleware(CookieAuthMiddleware),
+]
+app = FastAPI(middleware=middlewares)
+
+
+#Connexion à la BDD
+try:
+    mydb = mysql.connector.connect(
+
+        host="localhost",
+        user="user_admin",
+        password="Password1234*",
+        database="SAE410"
+    )
+    sql_cursor = mydb.cursor()
+except mysql.connector.Error as err:
+    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+        print("Something is wrong with your user name or password")
+    elif err.errno == errorcode.ER_BAD_DB_ERROR:
+        print("Database does not exist")
+    else:
+        print(err)
+
+else:
+    mydb.close()
+
+
+
 
 print("Ok")
 
-app = FastAPI()
-
+#Initialisation des templates pour jinja
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
+#Le code du site :
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -43,7 +85,7 @@ async def cr_account_post(username: Annotated[str, Form()], password: Annotated[
     sql_cursor.execute(sql, values)
     mydb.commit()
 
-    webbrowser.open("http://127.0.0.1:8000/login")
+    return RedirectResponse(url="/login", status_code=303)
 
 
 @app.get("/login")
@@ -52,7 +94,7 @@ async def login(request: Request):
 
 
 @app.post("/login")
-async def loginpost(username: Annotated[str, Form()], password: Annotated[str, Form()], response: Response):
+async def loginpost(response: Response, username: str = Form(...), password: str = Form(...)):
     sql = "SELECT * FROM users WHERE username = %s"
     val = (username,)
     sql_cursor.execute(sql, val)
@@ -61,8 +103,9 @@ async def loginpost(username: Annotated[str, Form()], password: Annotated[str, F
     for x in myresult:
         if username in x and password in x:
             print("ok")
+            response = RedirectResponse(url="/rdv", status_code=303)
             response.set_cookie(key="username", value=username)
-            return RedirectResponse(url="/rdv", status_code=303)
+            return response
 
         else:
             print("pas ok")
@@ -73,7 +116,8 @@ def get_username(request: Request):
 
 
 @app.get("/rdv")
-async def rdv(request: Request, username: str = Depends(get_username)):
+async def rdv(request: Request):
+    username = request.cookies.get("username")
     print(username)
     return templates.TemplateResponse("page_user.html", {"request": request, "username": username})
 
@@ -82,6 +126,7 @@ async def rdv(request: Request, username: str = Depends(get_username)):
 @app.post("/rdv")
 async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], usernamelog: str = Depends(get_username)):
 
+    #Partie Creation de RDV
     sql = "SELECT id FROM users WHERE username = %s"
     valsql = (usernamelog,)
     sql_cursor.execute(sql,valsql)
@@ -95,3 +140,18 @@ async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], u
     sql_cursor.execute(sql2, val)
     mydb.commit()
 
+    #Partie tableau de RDV
+    """
+    sqlTable = "SELECT * FROM rdv WHERE user_id = %s"
+    valtable = (resultsql1[0],)
+    sql_cursor.execute(sqlTable, valtable)
+    resultsqlTable = sql_cursor.fetchall()
+    print(resultsqlTable)"""
+
+
+
+@app.post("/logout")
+async def logout(response: Response):
+    response = RedirectResponse(url="/login", status_code=303)
+    response.delete_cookie("username")
+    return response
