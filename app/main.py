@@ -18,29 +18,14 @@ app = FastAPI()
 
 
 #Connexion à la BDD
-try:
-    mydb = mysql.connector.connect(
-
-        host="localhost",
-        user="user_admin",
-        password="Password1234*",
-        database="SAE410"
-    )
-    sql_cursor = mydb.cursor()
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
-    else:
-        print(err)
-
-
-
-
-
-
-print("Ok")
+mydb = mysql.connector.connect(
+	host="172.20.0.10",
+	port="3306",
+	user="root",
+	password="password2",
+	database="SAE410"
+)
+sql_cursor = mydb.cursor()
 
 #Initialisation des templates pour jinja
 templates = Jinja2Templates(directory="templates")
