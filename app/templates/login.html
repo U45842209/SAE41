@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <title>Titre de la page</title>
-  <link rel="stylesheet" href="style.css">
+ <link rel="stylesheet" href="{{ url_for('static', path='style_login.css') }}"/>
   <script src="script.js"></script>
 </head>
 <body>
-  <form method="post" action="#">
+  <form method="post" action="#" class="login-form">
       <label> Username </label>
-    <input placeholder="Enter a username" type="text" name="username">
+    <input placeholder="Enter a username" type="text" name="username" class="login-input">
     <br>
     <label> Password : </label>
-    <input placeholder="Enter your Password" type="password" name="password">
+    <input placeholder="Enter your Password" type="password" name="password" class="login-input">
     <br>
-    <input type="submit" value="Envoyer">
+    <input type="submit" value="Envoyer" class="login-button">
   </form>
 </body>
 </html>

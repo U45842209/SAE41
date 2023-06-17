@@ -1,143 +1,136 @@
-.cache{
-    display: none;
-}
-
-html, body{
-    margin: 0px;
-    padding: 0px;
-    background-color: rgb(214, 212, 212);
-
-    
-}
-
-
-/*HEADER*/
-
-header h1{
-  font-size: 25px;
-  margin: 0px;
-  padding: 20px 0px 30px 30px;  
-}
-
-header{
-background-color: rgb(172, 172, 172);
-
-}
-
-#bouton1, #bouton2{
-  text-decoration: none;
-  color: #000000; 
-  padding: 10px 20px; 
-  border: none; 
-  cursor: pointer;
-  font-size: 25px;
-  margin-left: 30px;
-  border-radius: 5px 5px 0px 0px; 
-  background-color: rgb(214, 212, 212);
-}
-
-#bouton1:hover, #bouton2:hover {
-  background-color:rgb(168, 164, 164) ;
-
-}
-
-
-/*FORMULAIRE TICKETS*/
-#ticket{
-    padding: 40px;
-    padding-right: 90px;
-    
-}
-
-#ticket h2{
-    font-size: 50px;
-}
-#titre{
-    font-size: 30px;
-}
-
-
-
-   #ticket form input[type="submit"] {
-    background-color: rgb(129, 128, 128); 
-    color: white; 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    
-  }
-  
-  #ticket form input[type="submit"]:hover {
-    background-color: #505150; 
-  }
-
-  #ticketform input{
-    border-radius: 3px;
-    padding: 2px;
-
-  }
-
-
-
-/*TABLEAU*/
-
-  #tableau{
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-  
-  #tableau h2{
-    margin: 0px;
-    padding-top:50px;
-    padding-bottom: 20px;
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 15px;
- 
-  }
-  
-  th, td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: left;
-    background-color: #ffffff;
-    
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
- 
-  td:nth-child(4) {
-    max-width: 200px; 
-    word-wrap: break-word; 
-  }
-
-  td:nth-child(7) {
-    max-width: 200px; 
-    word-wrap: break-word;
-  }
-
-
-  /*LIENS*/
-#lien-deconnexion {
-  background-color: rgb(255, 6, 6); 
-  color: rgb(255, 255, 255); 
-  text-decoration: none; 
+/* Titre "Hello {{ username }}" */
+#titre {
+  font-size: 24px;
   font-weight: bold;
-  font-size: 20px;
-  padding: 5px 10px; 
-  border-radius: 5px; 
-  position: absolute;
-  top: 10px; 
-  right: 10px;
+  text-align: center;
+  margin-top: 20px;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-#lien-deconnexion:hover {
-  background-color: #991c1c; 
+
+
+
+
+/* Formulaire de création de RDV */
+#new_rdv .login-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+#new_rdv .login-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#new_rdv .login-form input[type="text"],
+#new_rdv .login-form input[type="date"] {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 20%; /* Réduire la largeur à 80% */
+  margin-bottom: 10px;
+}
+
+#new_rdv .login-form input[type="submit"] {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Styles pour le bouton de déconnexion */
+form.logout-form {
+  display: inline-block;
+}
+
+.logout-form button {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.logout-form button:hover {
+  background-color: #ff3333;
+}
+
+
+/* Styles pour le tableau */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Styles spécifiques pour la mise en page */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+
+
+#menu {
+  margin-bottom: 20px;
+}
+
+/* Boutons */
+#menu {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#menu button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+#menu button:last-child {
+  margin-right: 0;
+}
+
+#new_rdv,
+#tableau {
+  margin-bottom: 20px;
+}
+
+.cache {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
