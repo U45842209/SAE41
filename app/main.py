@@ -62,15 +62,6 @@ async def login(request: Request):
 
 @app.post("/login")
 async def loginpost(response: Response, username: str = Form(...), password: str = Form(...)):
-    mydb = mysql.connector.connect(
-        host="172.20.0.10",
-        port="3306",
-        user="root",
-        password="password",
-        database="SAE410"
-    )
-    sql_cursor = mydb.cursor()
-
     sql = "SELECT * FROM users WHERE username = %s"
     val = (username,)
     sql_cursor.execute(sql, val)
