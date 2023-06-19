@@ -1,12 +1,13 @@
 from fastapi import FastAPI, Request, Form, Response, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRoute
 from typing import Annotated
 import mysql.connector
 from mysql.connector import errorcode
 import webbrowser
+from fastapi_login.exceptions import InvalidCredentialsException
 
 
 #Partie qui permet de bloquer des pages si le cookie n'est pas set avec le principe du middleware
@@ -18,14 +19,29 @@ app = FastAPI()
 
 
 #Connexion à la BDD
-mydb = mysql.connector.connect(
-	host="172.20.0.10",
-	port="3306",
-	user="root",
-	password="password",
-	database="SAE410"
-)
-sql_cursor = mydb.cursor()
+try:
+    mydb = mysql.connector.connect(
+
+        host="localhost",
+        user="user_admin",
+        password="Password1234*",
+        database="SAE410"
+    )
+    sql_cursor = mydb.cursor()
+except mysql.connector.Error as err:
+    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+        print("Something is wrong with your user name or password")
+    elif err.errno == errorcode.ER_BAD_DB_ERROR:
+        print("Database does not exist")
+    else:
+        print(err)
+
+
+
+
+
+
+print("Ok")
 
 #Initialisation des templates pour jinja
 templates = Jinja2Templates(directory="templates")
@@ -75,7 +91,8 @@ async def loginpost(response: Response, username: str = Form(...), password: str
             return response
 
         else:
-            print("pas ok")
+           response = RedirectResponse(url="/login", status_code=303)
+           return response
 
 
 def get_username(request: Request):
