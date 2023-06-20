@@ -6,17 +6,14 @@
   <link rel="stylesheet" href="{{ url_for('static', path='style_user.css') }}"/>
 </head>
 <body>
-  <h1 id="titre">Hello {{ username }}</h1>
-
   <div id="menu">
     <button id="bouton1">Créer un RDV</button>
     <button id="bouton2">Mes RDV</button>
-  </div>
-
-  <form action="/logout" method="post" class="logout-form">
+    <h1 id="titre">Hello {{ username }}</h1>
+    <form action="/logout" method="post" class="logout-form">
     <button type="submit">Déconnexion</button>
   </form>
-
+  </div>
   <div id="new_rdv">
     <h2>Créer un nouveau RDV :</h2>
     <form action="/rdv" method="post" class="login-form">
