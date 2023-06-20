@@ -19,25 +19,15 @@ app = FastAPI()
 
 
 #Connexion à la BDD
-try:
-    mydb = mysql.connector.connect(
+
+mydb = mysql.connector.connect(
 
         host="localhost",
         user="user_admin",
         password="Password1234*",
         database="SAE410"
     )
-    sql_cursor = mydb.cursor()
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
-    else:
-        print(err)
-
-
-
+sql_cursor = mydb.cursor()
 
 
 
@@ -124,17 +114,19 @@ async def rdv(request: Request, usernamelog: str = Depends(get_username)):
         item_id = str(line[0])
         item = {
             "objet": line[2],
-            "date": line[3].strftime("%Y-%m-%d")
+            "date": line[3].strftime("%Y-%m-%d"),
+            "time": str(line[4])
         }
         print(line)
         table_rdv[item_id] = item
+        print(item_id)
 
     return templates.TemplateResponse("page_user.html", {"request": request, "username": username, "table_rdv": table_rdv})
 
 
 
 @app.post("/rdv")
-async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], usernamelog: str = Depends(get_username)):
+async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], usernamelog: str = Depends(get_username), time: str = Form(...)):
 
     #Partie Creation de RDV
     sql = "SELECT id FROM users WHERE username = %s"
@@ -145,8 +137,8 @@ async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], u
 
     print(date)
 
-    sql2 = "INSERT INTO rdv (name_rdv, date_rdv, user_id) VALUES (%s,%s,%s)"
-    val = (objet, date, resultsql1[0])
+    sql2 = "INSERT INTO rdv (name_rdv, date_rdv, user_id,heure_rdv) VALUES (%s,%s,%s,%s)"
+    val = (objet, date, resultsql1[0],time)
     sql_cursor.execute(sql2, val)
     mydb.commit()
 
@@ -159,4 +151,15 @@ async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], u
 async def logout(response: Response):
     response = RedirectResponse(url="/login", status_code=303)
     response.delete_cookie("username")
+    return response
+
+
+@app.post("/delete")
+async def delete_rdv(response : Response, item_id: int = Form(...)):
+    sql = "DELETE FROM rdv WHERE id = %s"
+    val = (item_id,)
+    sql_cursor.execute(sql, val)
+    mydb.commit()
+
+    response = RedirectResponse(url="/rdv", status_code=303)
     return response
