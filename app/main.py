@@ -20,18 +20,23 @@ app = FastAPI()
 
 #Connexion à la BDD
 def get_sql_cursor():
+    mydb = None
+    cursor = None
     try:
         mydb = connect(
-            host="localhost",
-            user="user_admin",
-            password="Password1234*",
+            host="172.20.0.10",
+            user="root",
+            password="password",
             database="SAE410"
         )
         cursor = mydb.cursor()
         yield cursor
     finally:
-        cursor.close()
-        mydb.close()
+        if cursor:
+            cursor.close()
+        if mydb:
+            mydb.close()
+
 
 
 
