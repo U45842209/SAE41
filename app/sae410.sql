@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 20 juin 2023 à 14:34
+-- Généré le : mar. 20 juin 2023 à 15:12
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -33,7 +33,7 @@ CREATE TABLE `rdv` (
   `name_rdv` varchar(50) NOT NULL,
   `date_rdv` datetime NOT NULL,
   `heure_rdv` time NOT NULL,
-  `lien_secret` varchar(50) NOT NULL
+  `lien_secret` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
