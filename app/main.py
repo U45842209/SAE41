@@ -8,12 +8,14 @@ import mysql.connector
 from mysql.connector import errorcode
 import webbrowser
 from fastapi_login.exceptions import InvalidCredentialsException
+from jinja2 import Environment, FileSystemLoader
+import hashlib
 
 
 #Partie qui permet de bloquer des pages si le cookie n'est pas set avec le principe du middleware
 
 
-
+adresse_ip = "localhost"
 #Ajout du middleware à FastAPI
 app = FastAPI()
 
@@ -22,7 +24,7 @@ app = FastAPI()
 
 mydb = mysql.connector.connect(
 
-        host="localhost",
+        host=adresse_ip,
         user="user_admin",
         password="Password1234*",
         database="SAE410"
@@ -89,7 +91,7 @@ def get_username(request: Request):
     return request.cookies.get("username")
 
 
-
+#Page complète avec le tableau
 @app.get("/rdv")
 async def rdv(request: Request, usernamelog: str = Depends(get_username)):
     username = request.cookies.get("username")
@@ -115,7 +117,8 @@ async def rdv(request: Request, usernamelog: str = Depends(get_username)):
         item = {
             "objet": line[2],
             "date": line[3].strftime("%Y-%m-%d"),
-            "time": str(line[4])
+            "time": str(line[4]),
+            "lien": str(line[5])
         }
         print(line)
         table_rdv[item_id] = item
@@ -124,7 +127,7 @@ async def rdv(request: Request, usernamelog: str = Depends(get_username)):
     return templates.TemplateResponse("page_user.html", {"request": request, "username": username, "table_rdv": table_rdv})
 
 
-
+#Partie formulaire de rdv
 @app.post("/rdv")
 async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], usernamelog: str = Depends(get_username), time: str = Form(...)):
 
@@ -135,10 +138,16 @@ async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], u
     resultsql1 = sql_cursor.fetchone()
     print(resultsql1[0])
 
-    print(date)
+    #Partie création du lien secret en sha1
+    hash = hashlib.sha1()
+    nom_rdv = objet
+    hash.update(nom_rdv.encode())
+    lien = f"http://{adresse_ip}/" + hash.hexdigest()
 
-    sql2 = "INSERT INTO rdv (name_rdv, date_rdv, user_id,heure_rdv) VALUES (%s,%s,%s,%s)"
-    val = (objet, date, resultsql1[0],time)
+    #Envoie dans la BDD
+    print(date)
+    sql2 = "INSERT INTO rdv (name_rdv, date_rdv, user_id,heure_rdv,lien_secret) VALUES (%s,%s,%s,%s,%s)"
+    val = (objet, date, resultsql1[0], time,lien)
     sql_cursor.execute(sql2, val)
     mydb.commit()
 
@@ -146,7 +155,7 @@ async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], u
 
     return RedirectResponse(url="/rdv", status_code=303)
 
-
+#Bouton de déconnexion
 @app.post("/logout")
 async def logout(response: Response):
     response = RedirectResponse(url="/login", status_code=303)
@@ -154,6 +163,7 @@ async def logout(response: Response):
     return response
 
 
+#Bouton de suppression de rdv
 @app.post("/delete")
 async def delete_rdv(response : Response, item_id: int = Form(...)):
     sql = "DELETE FROM rdv WHERE id = %s"
@@ -163,3 +173,5 @@ async def delete_rdv(response : Response, item_id: int = Form(...)):
 
     response = RedirectResponse(url="/rdv", status_code=303)
     return response
+
+

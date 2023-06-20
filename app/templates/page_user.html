@@ -38,6 +38,7 @@
         <tr>
           <th>Objet</th>
           <th>Date du rendez-vous</th>
+          <th>Lien secret du RDV </th>
           <th> Supprimer des rendez-vous</th>
         </tr>
       </thead>
@@ -48,6 +49,7 @@
         <tr>
           <td>{{ item.objet }}</td>
           <td>{{ item.date}} : {{ item.time }}</td>
+          <td> {{ item.lien }} </td>
           <form method="post" action="/delete">
           <td> <input type="hidden" name="item_id" value="{{ item_id }}">
                 <input type="submit" value="Supprimer">
