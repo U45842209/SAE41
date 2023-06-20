@@ -23,7 +23,7 @@ def get_sql_cursor():
     mydb = None
     cursor = None
     try:
-        mydb = connect(
+        mydb = mysql.connector.connect(
             host="172.20.0.10",
             user="root",
             password="password",
