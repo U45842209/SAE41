@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 16 juin 2023 à 08:57
+-- Généré le : mar. 20 juin 2023 à 13:00
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -31,15 +31,17 @@ CREATE TABLE `rdv` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name_rdv` varchar(50) NOT NULL,
-  `date_rdv` datetime NOT NULL
+  `date_rdv` datetime NOT NULL,
+  `heure_rdv` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `rdv`
 --
 
-INSERT INTO `rdv` (`id`, `user_id`, `name_rdv`, `date_rdv`) VALUES
-(1, 2, 'Test', '2023-06-15 00:00:00');
+INSERT INTO `rdv` (`id`, `user_id`, `name_rdv`, `date_rdv`, `heure_rdv`) VALUES
+(6, 2, 'test', '2023-06-16 00:00:00', '00:00:00'),
+(7, 2, 'test', '2023-06-18 00:00:00', '00:00:00');
 
 -- --------------------------------------------------------
 
@@ -89,7 +91,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `rdv`
 --
 ALTER TABLE `rdv`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT pour la table `users`
