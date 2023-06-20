@@ -19,22 +19,19 @@ app = FastAPI()
 
 
 #Connexion à la BDD
-try:
-    mydb = mysql.connector.connect(
-
-        host="localhost",
-        user="user_admin",
-        password="Password1234*",
-        database="SAE410"
-    )
-    sql_cursor = mydb.cursor()
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
-    else:
-        print(err)
+def get_sql_cursor():
+    try:
+        mydb = connect(
+            host="localhost",
+            user="user_admin",
+            password="Password1234*",
+            database="SAE410"
+        )
+        cursor = mydb.cursor()
+        yield cursor
+    finally:
+        cursor.close()
+        mydb.close()
 
 
 
@@ -77,7 +74,12 @@ async def login(request: Request):
 
 
 @app.post("/login")
-async def loginpost(response: Response, username: str = Form(...), password: str = Form(...), sql_cursor: mysql.connector.cursor.MySQLCursor = Depends(get_sql_cursor)):
+async def loginpost(
+    response: Response,
+    username: str = Form(...),
+    password: str = Form(...),
+    sql_cursor: mysql.connector.cursor.MySQLCursor = Depends(get_sql_cursor)
+):
     sql = "SELECT * FROM users WHERE username = %s"
     val = (username,)
     sql_cursor.execute(sql, val)
