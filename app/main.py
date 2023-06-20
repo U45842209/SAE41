@@ -142,7 +142,7 @@ async def rdvpost(objet: Annotated[str, Form()], date: Annotated[str, Form()], u
     hash = hashlib.sha1()
     nom_rdv = objet
     hash.update(nom_rdv.encode())
-    lien = f"http://{adresse_ip}/" + hash.hexdigest()
+    lien = hash.hexdigest()
 
     #Envoie dans la BDD
     print(date)
