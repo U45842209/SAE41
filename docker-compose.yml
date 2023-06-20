@@ -26,8 +26,6 @@ services:
     ports:
       - '8000:8000'
     restart: unless-stopped
-    volumes:
-      - fastapi:/var/lib/fastapi
     networks:
       SAE41_network:
         ipv4_address: 172.20.0.20
@@ -45,7 +43,6 @@ services:
 # Names our volume
 volumes:
   my-db:
-  fastapi:
 
 networks:
   SAE41_network:
