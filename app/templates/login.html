@@ -3,18 +3,25 @@
 <head>
   <meta charset="utf-8">
   <title>Titre de la page</title>
- <link rel="stylesheet" href="{{ url_for('static', path='style_login.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', path='style_login.css') }}"/>
+  <style>
+    /* Incluez le CSS ici */
+  </style>
   <script src="script.js"></script>
 </head>
 <body>
-  <form method="post" action="#" class="login-form">
-      <label> Username </label>
-    <input placeholder="Enter a username" type="text" name="username" class="login-input">
-    <br>
-    <label> Password : </label>
-    <input placeholder="Enter your Password" type="password" name="password" class="login-input">
-    <br>
-    <input type="submit" value="Envoyer" class="login-button">
-  </form>
+  <form method="POST" action="">
+        <h1>Sign in</h1>
+        <label style="width:100%;text-align:left;" for="1">Username</label>
+        <div class="input-container">
+            <input id="username" type="text" name="username"/>
+        </div>
+        <label style="width:100%;text-align:left;" for="2">Password</label>
+
+        <div class="input-container">
+            <input id="password" type="password" name="password"/>
+        </div>
+        <input id="bn" type="submit" class="btn" value="Sign in" />
+    </form>
 </body>
 </html>
