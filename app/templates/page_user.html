@@ -17,7 +17,7 @@
     <button type="submit">Déconnexion</button>
   </form>
 
-  <form method="post" class="join_rdv" id="form_join">
+  <form method="post"  id="form_join" class="cache">
     <button type="submit" name="action" value="Rejoindre"> Rejoindre</button>
     <br>
     <label> Lien du RDV : </label>
@@ -59,7 +59,9 @@
           <td>{{ item.date}} : {{ item.time }}</td>
           <td> {{ item.lien }} </td>
           <form method="post" action="/delete">
-          <td> <input type="hidden" name="item_id" value="{{ item_id }}">
+          <td>
+                <input type="hidden" name="item_id" value="{{ item_id }}">
+                <input type="hidden" name="lien" value="{{ item.lien }}">
                 <input type="submit" value="Supprimer">
           </td>
           </form>

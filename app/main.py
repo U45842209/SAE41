@@ -5,18 +5,17 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRoute
 from typing import Annotated
 import mysql.connector
-from mysql.connector import errorcode
 import webbrowser
 from fastapi_login.exceptions import InvalidCredentialsException
-from jinja2 import Environment, FileSystemLoader
 import hashlib
 from starlette.exceptions import HTTPException as StarletteHTTPException
+import os
 
 
 #Partie qui permet de bloquer des pages si le cookie n'est pas set avec le principe du middleware
 
 
-adresse_ip = "172.20.0.20"
+adresse_ip = "localhost"
 #Ajout du middleware à FastAPI
 app = FastAPI()
 
@@ -26,8 +25,8 @@ app = FastAPI()
 mydb = mysql.connector.connect(
 
         host=adresse_ip,
-        user="root",
-        password="password",
+        user="user_admin",
+        password="Password1234*",
         database="SAE410"
     )
 sql_cursor = mydb.cursor()
@@ -43,12 +42,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 #Le code du site :
 
-
-@app.get("/", response_class=HTMLResponse)
-async def accueil(request:Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
 @app.get("/new_account", response_class=HTMLResponse)
 async def create_account(request:Request):
     return templates.TemplateResponse("new_account.html", {"request": request})
@@ -61,15 +54,15 @@ async def cr_account_post(username: Annotated[str, Form()], password: Annotated[
     sql_cursor.execute(sql, values)
     mydb.commit()
 
-    return RedirectResponse(url="/login", status_code=303)
+    return RedirectResponse(url="/", status_code=303)
 
 
-@app.get("/login")
+@app.get("/")
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-@app.post("/login")
+@app.post("/")
 async def loginpost(response: Response, username: str = Form(...), password: str = Form(...)):
     sql = "SELECT * FROM users WHERE username = %s"
     val = (username,)
@@ -84,7 +77,7 @@ async def loginpost(response: Response, username: str = Form(...), password: str
             return response
 
         else:
-           response = RedirectResponse(url="/login", status_code=303)
+           response = RedirectResponse(url="/", status_code=303)
            return response
 
 
@@ -153,8 +146,22 @@ async def rdvpost(request: Request,
         hash.update(nom_rdv.encode())
         lien = hash.hexdigest()
 
+
+        #Partie création de la page html du RDV:
+        page_type_html = f"""
+ <!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Titre de la page</title>
+</head>
+<body>
+    <h1> Vous etes arrives sur la page du rendez vous : {objet}</h1>
+</body>
+</html>
+        """
         with open (f"templates/reu/{hash.hexdigest()}.html", "x") as f:
-            f.write(f"{hash.hexdigest()}")
+            f.write(page_type_html)
             f.close()
 
 
@@ -181,72 +188,32 @@ async def rdvpost(request: Request,
 #Bouton de déconnexion
 @app.post("/logout")
 async def logout(response: Response):
-    response = RedirectResponse(url="/login", status_code=303)
+    response = RedirectResponse(url="/", status_code=303)
     response.delete_cookie("username")
     return response
 
 
 #Bouton de suppression de rdv
 @app.post("/delete")
-async def delete_rdv(response : Response, item_id: int = Form(...)):
+async def delete_rdv(response : Response, item_id: int = Form(...), lien : str = Form(...)):
     sql = "DELETE FROM rdv WHERE id = %s"
     val = (item_id,)
     sql_cursor.execute(sql, val)
     mydb.commit()
     response = RedirectResponse(url="/rdv", status_code=303)
+
+    sqlDel_Table = f"DROP TABLE {lien}"
+    sql_cursor.execute(sqlDel_Table)
+    mydb.commit()
+
+    os.remove(f"templates/reu/{lien}.html")
     return response
 
 
-"""@app.get("/{nom_fichier}")
-async def auto_page(request: Request, nom_fichier : str, usernamelog: str = Depends(get_username)):
-    rdv_name = {nom_fichier}
-    sql_id = "SELECT id FROM users WHERE username = %s"
-    val_id = (usernamelog,)
-    sql_cursor.execute(sql_id,val_id)
-    result = sql_cursor.fetchone()
-
-    sql = "INSERT INTO %s (id) VALUES (%s)"
-    val = (rdv_name,result[0][0])
-    sql_cursor.execute(sql, val)
-    mydb.commit()
-
-
-    sql_info_rdv = "SELECT id, objet, date, time FROM rdv WHERE lien = %s"
-    val_info_rdv = (nom_fichier,)
-    sql_cursor.execute(sql_info_rdv, val_info_rdv)
-    result = sql_cursor.fetchall()
-
-    table_rdv = {}
-    for line in result:
-        item_id = str(line[0])
-        item = {
-            "objet": line[1],
-            "date": line[2].strftime("%Y-%m-%d"),
-            "time": str(line[3])
-        }
-        print(line)
-        table_rdv[item_id] = item
-        print(item_id)
-
-    return templates.TemplateResponse("page_answers.html", {"request": request, "username": usernamelog, "table_rdv": table_rdv, "user_id" : result[0][0]})
-
-
-@app.post("/{nom_fichier")
-async def auto_page(request: Request, nom_fichier : str, usernamelog: str = Depends(get_username), reponse_yes: str= Form(...), reponse_no : str = Form(...)):
-    sql_id = "SELECT id FROM users WHERE username = %s"
-    val_id = (usernamelog,)
-    sql_cursor.execute(sql_id, val_id)
-    result = sql_cursor.fetchone()
-
-    sql = "INSERT INTO %s (reponse) VALUES (%s)"
-    val = (nom_fichier, result[0][0])
-    sql_cursor.execute(sql,val)
-    mydb.commit()
-"""
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
-    if request.url.path in ["/login", "/new_account","/rdv"]:
+    if request.url.path in ["/", "/new_account","/rdv"]:
         # Renvoyer la réponse par défaut sans effectuer d'autres traitements
         return exc
 
