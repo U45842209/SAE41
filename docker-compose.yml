@@ -24,11 +24,29 @@ services:
     environment:
       PORT: 8000
     ports:
-      - '8000:8000'
+      - '8001:8000'
     restart: unless-stopped
+    depends_on:
+      - db
     networks:
       SAE41_network:
         ipv4_address: 172.20.0.20
+
+  fastapi_backup:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: fastapi_backup
+    environment:
+      PORT: 8000
+    ports:
+      - '8002:8000'
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      SAE41_network:
+        ipv4_address: 172.20.0.21
 
   adminer:
     build:
@@ -46,9 +64,14 @@ services:
       dockerfile: Dockerfile.nginx
     restart: unless-stopped
     container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - fastapi
+      - fastapi_backup
     networks:
       SAE41_network:
-        ipv4_address: 172.20.0.1
+        ipv4_address: 172.20.0.2
 
 # Names our volume
 volumes:

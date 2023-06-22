@@ -1,8 +1,13 @@
 upstream loadbalancer {
-server 172.20.0.1:5001 weight=6;
-server 172.20.0.1:5002 weight=4;
+server 172.20.0.1:8001 weight=6;
+server 172.20.0.1:8002 weight=4;
 }
 server {
-location / {
-proxy_pass http://loadbalancer;
-}}
+	listen 80;
+	server_name 45.147.98.50;
+	location / {
+		proxy_pass http://loadbalancer;
+		proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+	}
+}
