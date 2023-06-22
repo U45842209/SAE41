@@ -32,9 +32,6 @@ mydb = mysql.connector.connect(
 sql_cursor = mydb.cursor()
 
 
-
-print("Ok")
-
 #Initialisation des templates pour jinja
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -89,7 +86,7 @@ def get_username(request: Request):
 @app.get("/rdv")
 async def rdv(request: Request, usernamelog: str = Depends(get_username)):
     username = request.cookies.get("username")
-    print(username)
+
 
     # Partie tableau de RDV
     table_rdv = {}
@@ -104,7 +101,7 @@ async def rdv(request: Request, usernamelog: str = Depends(get_username)):
     valtable = (resultsql1[0],)
     sql_cursor.execute(sqlTable, valtable)
     resultsqlTable = sql_cursor.fetchall()
-    print(resultsqlTable)
+
 
     for line in resultsqlTable:
         item_id = str(line[0])
@@ -114,9 +111,9 @@ async def rdv(request: Request, usernamelog: str = Depends(get_username)):
             "time": str(line[4]),
             "lien": str(line[5])
         }
-        print(line)
+
         table_rdv[item_id] = item
-        print(item_id)
+
 
     return templates.TemplateResponse("page_user.html", {"request": request, "username": username, "table_rdv": table_rdv})
 
@@ -138,7 +135,7 @@ async def rdvpost(request: Request,
         valsql = (usernamelog,)
         sql_cursor.execute(sql,valsql)
         resultsql1 = sql_cursor.fetchone()
-        print(resultsql1[0])
+
 
         #Partie création du lien secret en sha1
         hash = hashlib.sha1()
@@ -166,7 +163,7 @@ async def rdvpost(request: Request,
 
 
         #On envoie les différentes informations du rdv dans la BDD
-        print(date)
+
         sql2 = "INSERT INTO rdv (name_rdv, date_rdv, user_id,heure_rdv,lien_secret) VALUES (%s,%s,%s,%s,%s)"
         val = (objet, date, resultsql1[0], time,lien)
         sql_cursor.execute(sql2, val)
@@ -219,19 +216,15 @@ async def http_exception_handler(request, exc):
 
     sql = "SELECT lien_secret FROM rdv WHERE lien_secret LIKE %s"
     url = str(request.url)
-    print(url)
+
     url_split = url.split("/")
     url_end = url_split[-1]
     val = (url_end,)
     sql_cursor.execute(sql, val)
     result = sql_cursor.fetchone() #Ici je récupère dans un tableau tous mes liens secret
 
-
-    print(type(result))
-    print(url_end)
-
     if url_end in result:
-        print("ici")
+
         return templates.TemplateResponse(f"/reu/{url_end}.html", {"request": request})
     else:
         return templates.TemplateResponse("404.html", {"request": request})
