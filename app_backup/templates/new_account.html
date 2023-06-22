@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Titre de la page</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='style_login.css') }}"/>
+  <script src="script.js"></script>
+</head>
+<body>
+ <form method="POST" action="">
+        <h1>Creation du compte</h1>
+        <label style="width:100%;text-align:left;" for="1">Nom d'utilisateur</label>
+        <div class="input-container">
+            <input id="username" type="text" name="username"/>
+        </div>
+        <label style="width:100%;text-align:left;" for="2">Mot de passe</label>
+
+        <div class="input-container">
+            <input id="password" type="password" name="password"/>
+        </div>
+        <input id="bn" type="submit" class="btn" value="Crée le compte" />
+   <p> Vous êtes déjà inscrit ? <a href="/login">Connectez-vous !</a></p>
+    </form>
+</body>
+</html>

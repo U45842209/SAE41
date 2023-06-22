@@ -1,0 +1,17 @@
+FROM debian:11
+
+WORKDIR /app
+
+RUN apt update && apt upgrade -y
+
+RUN apt install python3-pip -y
+
+COPY ./pip/ ./
+
+RUN pip install -r requirements.txt
+
+RUN pip install --upgrade fastapi uvicorn httpx
+
+COPY ./app_backup/ ./
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
