@@ -40,6 +40,16 @@ services:
       SAE41_network:
         ipv4_address: 172.20.0.30
 
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    restart: unless-stopped
+    container_name: nginx
+    networks:
+      SAE41_network:
+        ipv4_address: 172.20.0.1
+
 # Names our volume
 volumes:
   my-db:
