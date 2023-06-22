@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 20 juin 2023 à 15:12
+-- Généré le : jeu. 22 juin 2023 à 15:56
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -36,15 +36,6 @@ CREATE TABLE `rdv` (
   `lien_secret` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `rdv`
---
-
-INSERT INTO `rdv` (`id`, `user_id`, `name_rdv`, `date_rdv`, `heure_rdv`, `lien_secret`) VALUES
-(13, 2, 'Test', '2023-06-20 00:00:00', '13:03:00', ''),
-(14, 2, 'Test', '2023-06-21 00:00:00', '13:18:00', ''),
-(17, 2, 'testMarc', '2023-06-20 00:00:00', '14:32:00', 'http://localhost/6cb5be872edd5addca28a10b9739e3c0b');
-
 -- --------------------------------------------------------
 
 --
@@ -63,11 +54,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (1, 'Marc', 'Marc'),
-(2, 'pierre', 'pierre'),
-(3, 'users1', 'users2'),
-(4, 'Maxime', 'Maxime'),
-(5, 'evan', 'evan'),
-(8, 'dimitri', 'prout');
+(2, 'pierre', 'pierre');
 
 --
 -- Index pour les tables déchargées
@@ -94,13 +81,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `rdv`
 --
 ALTER TABLE `rdv`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées
