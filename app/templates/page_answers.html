@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="utf-8">
   <title>Titre de la page</title>
@@ -17,37 +17,16 @@
     <button type="submit">Déconnexion</button>
   </form>
 
-  <form method="post" class="join_rdv" id="form_join">
-    <button type="submit" name="action" value="Rejoindre"> Rejoindre</button>
-    <br>
-    <label> Lien du RDV : </label>
-    <input type="text" name="lien_rdv" >
-  </form>
 
-
-  <div id="new_rdv">
-    <h2>Créer un nouveau RDV :</h2>
-    <form action="/rdv" method="post" class="login-form" id="form-rdv">
-      <label>Nouveau RDV:</label>
-      <input placeholder="Objet" type="text" name="objet" >
-      <br>
-      <label>Date:</label>
-      <input type="date" name="date" >
-      <input type="time" name="time" >
-      <br>
-      <input type="submit" name="action" value="Envoyer">
-    </form>
-  </div>
 
   <div id="tableau" class="cache">
-    <h2>Vos Rendez-vous :</h2>
+    <h2>Le rendez-vous :</h2>
     <table>
       <thead>
         <tr>
           <th>Objet</th>
           <th>Date du rendez-vous</th>
-          <th>Lien secret du RDV </th>
-          <th> Supprimer des rendez-vous</th>
+          <th> Répondre</th>
         </tr>
       </thead>
 
@@ -57,10 +36,10 @@
         <tr>
           <td>{{ item.objet }}</td>
           <td>{{ item.date}} : {{ item.time }}</td>
-          <td> {{ item.lien }} </td>
           <form method="post" action="/delete">
-          <td> <input type="hidden" name="item_id" value="{{ item_id }}">
-                <input type="submit" value="Supprimer">
+          <td>
+            <input type="submit" name="reponse_yes">Oui</input>
+            <input type="submit" name="reponse_no">Non</input>
           </td>
           </form>
         </tr>
