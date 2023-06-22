@@ -1,6 +1,6 @@
 upstream loadbalancer {
-server 172.20.0.1:8001 weight=6;
-server 172.20.0.1:8002 weight=4;
+server 172.20.0.1:8001;
+server 172.20.0.1:8002 backup;
 }
 server {
 	listen 80;
