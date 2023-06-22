@@ -15,7 +15,7 @@ import os
 #Partie qui permet de bloquer des pages si le cookie n'est pas set avec le principe du middleware
 
 
-adresse_ip = "localhost"
+adresse_ip = "172.20.0.10"
 #Ajout du middleware à FastAPI
 app = FastAPI()
 
@@ -25,8 +25,8 @@ app = FastAPI()
 mydb = mysql.connector.connect(
 
         host=adresse_ip,
-        user="user_admin",
-        password="Password1234*",
+        user="root",
+        password="password",
         database="SAE410"
     )
 sql_cursor = mydb.cursor()
