@@ -4,5 +4,4 @@ Pour faire fonctionner ce projet, il faut :
 - Démarer start.sh
 
 # Contribution
-@Darkenston pour le HTML, CSS, JavaScript et SQL
-@U45842209 pour la conteneurisation
+@Darkenston pour le HTML, CSS, JavaScript et SQL  @U45842209 pour la conteneurisation
